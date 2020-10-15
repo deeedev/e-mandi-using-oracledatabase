@@ -17,7 +17,7 @@ public class FarmerDAO {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		String sql = "select userdetails.id id_1, farmer.farmer.id from userdetails left join farmer on userdetails.id = farmer.farmerid where type = 'Farmer'";
+		String sql = "select userdetails.id id_1, farmer.farmerid from userdetails left join farmer on userdetails.id = farmer.farmerid where type = 'Farmer'";
 		ResultSet rs = null;
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
@@ -55,7 +55,7 @@ public class FarmerDAO {
 				}
 
 			}
-			System.out.println("*** WholeSellers are successfully added ***");
+			System.out.println("*** Farmers are successfully added ***");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class FarmerDAO {
 	private void add(Farmer fam) {
 		// TODO Auto-generated method stub
 
-		String sql = "Insert into WholeSeller values (?,?)";
+		String sql = "Insert into Farmer values (?,?)";
 		try {
 			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
 			st.setLong(1, fam.getLicenseNumber());

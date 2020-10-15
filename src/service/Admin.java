@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
+import dao.CropDAO;
 import dao.FarmerDAO;
 import dao.RetailerDAO;
 import dao.WholeSellerDAO;
@@ -15,6 +16,7 @@ public class Admin {
 	WholeSellerDAO wsdao = new WholeSellerDAO();
 	FarmerDAO famdao = new FarmerDAO();
 	RetailerDAO retaildao = new RetailerDAO();
+	CropDAO cropdao = new CropDAO();
 
 	public void Login() throws IOException, ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
@@ -25,11 +27,11 @@ public class Admin {
 			System.out.println();
 			System.out.println("1. Add/Remove WholeSellers");
 			System.out.println("2. Add/Remove Farmers");
-			System.out.println("2. Add/Remove Retailer");
-			System.out.println("3. Set Minimum Support Price");
-			System.out.println("4. Approve License Renewals");
-			System.out.println("5. View FeedBack or Complaint");
-			System.out.println("6. Exit");
+			System.out.println("3. Add/Remove Retailer");
+			System.out.println("4. Update Crops Details");
+			System.out.println("5. Approve License Renewals");
+			System.out.println("6. View FeedBack or Complaint");
+			System.out.println("7. Exit");
 			System.out.println("\nEnter your choices: ");
 
 			int ch = Integer.parseInt(br.readLine());
@@ -162,8 +164,6 @@ public class Admin {
 						break;
 					}
 
-					break;
-
 				} while (d1 != 4);
 				break;
 
@@ -237,9 +237,53 @@ public class Admin {
 
 //ADmin case 4 starts here !!!
 			case 4:
+
+				int f1;
+				do {
+					System.out.println("1. Add/Remove Crops from List");
+					System.out.println("2. Set Minimum Support Price");
+					System.out.println("3. Exit");
+					System.out.println("Enter your choice: ");
+
+					int f = Integer.parseInt(br.readLine());
+					f1 = f;
+
+					switch (f) {
+					case 1:
+						System.out.println("1. Add Crops");
+						System.out.println("2. Remove Crops");
+
+						int f2 = Integer.parseInt(br.readLine());
+
+						switch (f2) {
+						case 1:
+							cropdao.addcrops();
+							break;
+
+						case 2:
+							cropdao.removecrops();
+							break;
+						default:
+							break;
+						}
+						break;
+
+					case 2:
+						cropdao.setMSP();
+						break;
+
+					default:
+						break;
+					}
+
+				} while (f1 != 3);
 				break;
 
+//Admin case 5 starts here!!
+
+			case 5:
+				break;
 			}
-		} while (c1 != 6);
+		} while (c1 != 7);
 	}
 }

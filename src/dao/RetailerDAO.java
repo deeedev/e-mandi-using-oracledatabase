@@ -56,7 +56,7 @@ public class RetailerDAO {
 				}
 
 			}
-			System.out.println("*** WholeSellers are successfully added ***");
+			System.out.println("*** Retailers are successfully added ***");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,7 +67,7 @@ public class RetailerDAO {
 	private void add(Retailer retail) {
 		// TODO Auto-generated method stub
 
-		String sql = "Insert into WholeSeller values (?,?)";
+		String sql = "Insert into Retailer values (?,?)";
 		try {
 			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
 			st.setLong(1, retail.getLicenseNumber());
@@ -130,7 +130,7 @@ public class RetailerDAO {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = ConnectionManager.getConnection().prepareStatement(
-					"Select Firstname,lastname,email,phonenumber,address,licensenumber from userdetails join retailer on retailer.retailer.id = userdetails.id where retailer.licensenumber = ?");
+					"Select Firstname,lastname,email,phonenumber,address,licensenumber from userdetails join retailer on retailer.retailerid = userdetails.id where retailer.licensenumber = ?");
 			preparedStatement.setLong(1, Long.parseLong(readLine));
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {

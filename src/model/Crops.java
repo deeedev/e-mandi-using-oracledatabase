@@ -2,10 +2,19 @@ package model;
 
 public class Crops {
 
+	int cropID;
 	String name;
 	double price;
 	String msp;
 	double quantity;
+
+	public int getCropID() {
+		return cropID;
+	}
+
+	public void setCropID(int cropID) {
+		this.cropID = cropID;
+	}
 
 	public double getPrice() {
 		return price;
