@@ -21,9 +21,14 @@ public class Admin {
 	public void Login() throws IOException, ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 
+		System.out.println("<--------------------------------------------------->");
+		System.out.println("<         Welcome to the Admin Portal               ");
+		System.out.println("<--------------------------------------------------->");
+
 		int c1;
 
 		do {
+
 			System.out.println();
 			System.out.println("1. Add/Remove WholeSellers");
 			System.out.println("2. Add/Remove Farmers");
@@ -219,7 +224,7 @@ public class Admin {
 					case 3:
 
 						System.out.println("Enter License Number: ");
-						retaildao.removeFarmer(br.readLine());
+						retaildao.removeRetailer(br.readLine());
 						break;
 
 					case 4:
@@ -249,6 +254,7 @@ public class Admin {
 					f1 = f;
 
 					switch (f) {
+
 					case 1:
 						System.out.println("1. Add Crops");
 						System.out.println("2. Remove Crops");
@@ -258,6 +264,7 @@ public class Admin {
 						switch (f2) {
 						case 1:
 							cropdao.addcrops();
+							System.out.println("\n*** Crop List Updated ***\n");
 							break;
 
 						case 2:

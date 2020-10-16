@@ -18,6 +18,7 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	CropDAO cropdao = new CropDAO();
+	UserDAO userdao = new UserDAO();
 
 	public void AddWholeSeller() throws NumberFormatException, IOException {
 
@@ -47,13 +48,14 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 				if (id == null) {
 
 					ws.setWholeSellerID(rs.getInt(1));
-					System.out.println("Enter License Number: ");
+					System.out.println("Assign License Number to User" + userdao.getUserById(rs.getInt(1)) + ": ");
 					ws.setLicenseNumber(Long.parseLong(br.readLine()));
 					add(ws);
 				}
 
 			}
-			System.out.println("*** WholeSellers are successfully added ***");
+			System.out.println("*** No New Account Request for WholeSeller ***");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -77,6 +79,8 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("*** WholeSellers are successfully added ***");
 
 	}
 
@@ -189,13 +193,11 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 
 	private void setbp(int id, int bp) {
 
-		String sql = "insert into rate(buyprice) value(?) where id = ?";
+		String sql = "update rate set buyprice =" + bp + "where cropid =" + id;
 
 		try {
-			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-			st.setInt(1, bp);
-			st.setInt(2, id);
-			st.executeUpdate();
+			Statement st = ConnectionManager.getConnection().createStatement();
+			st.executeQuery(sql);
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -234,13 +236,11 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 
 	private void setsp(int id, int sp) {
 
-		String sql = "insert into rate(sellprice) value(?) where id = ?";
+		String sql = "update rate set sellprice=" + sp + " where cropid = " + id;
 
 		try {
-			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-			st.setInt(1, sp);
-			st.setInt(2, id);
-			st.executeUpdate();
+			Statement st = ConnectionManager.getConnection().createStatement();
+			st.executeQuery(sql);
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -260,20 +260,29 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 	@Override
 	public void Buy() {
 
-		String sql = "select * from trade where status = null and type = 'Sell'";
+		String sql = "select * from trade where status = 'Open' and type = 'Sell'";
 
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = st.executeQuery(sql);
 
+			if (rs == null) {
+				System.out.println("\n*** No Sell Orders ***\n");
+			}
+
 			while (rs.next()) {
+				int orderid = rs.getInt(1);
+				int cropid = rs.getInt(2);
+				int ln = rs.getInt(3);
+				int price = rs.getInt(5);
+				int quan = rs.getInt(6);
 
 				System.out.println("**********************");
-				System.out.println("OrderID: " + rs.getInt(1) + "\nCrop Name: " + cropdao.getCropbyid(rs.getInt(2))
-						+ "\nLicense Number: " + rs.getInt(3) + "\nPrice: " + rs.getInt(5) + "\nQuantity: "
-						+ rs.getInt(6));
+				System.out.println("OrderID: " + orderid + "\nCrop Name: " + cropdao.getCropbyid(cropid)
+						+ "\nLicense Number: " + ln + "\nPrice: " + price + "\nQuantity: " + quan);
 				System.out.println("**********************");
 			}
+
 			ConnectionManager.getConnection().close();
 
 			System.out.println("Select Order ID to complete the transaction");
@@ -281,7 +290,9 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 
 			completeBuy(id);
 
-		} catch (ClassNotFoundException e) {
+		} catch (
+
+		ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -292,14 +303,11 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 	}
 
 	private void completeBuy(int id) {
-		String sql = "insert into trade(status) values(?) where id = ?";
+		String sql = "update trade set status = 'Completed' where id = " + id;
 
 		try {
-			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-			st.setString(1, "Completed");
-			st.setInt(2, id);
-
-			st.executeUpdate();
+			Statement st = ConnectionManager.getConnection().createStatement();
+			st.executeQuery(sql);
 
 			ConnectionManager.getConnection().close();
 
@@ -317,27 +325,34 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 	@Override
 	public void Sell() {
 
-		String sql = "select * from trade where status = null and type = 'Buy'";
+		String sql = "select * from trade where status = 'Open' and type = 'Buy'";
 
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = st.executeQuery(sql);
 
-			while (rs.next()) {
+			if (rs != null) {
+				while (rs.next()) {
 
-				System.out.println("**********************");
-				System.out.println("OrderID: " + rs.getInt(1) + "\nCrop Name: " + cropdao.getCropbyid(rs.getInt(2))
-						+ "\nLicense Number: " + rs.getInt(3) + "\nPrice: " + rs.getInt(5) + "\nQuantity: "
-						+ rs.getInt(6));
-				System.out.println("**********************");
-			}
-			ConnectionManager.getConnection().close();
+					int orderId = rs.getInt(1);
+					int cropId = rs.getInt(2);
+					int ln = rs.getInt(3);
+					int price = rs.getInt(5);
+					int quan = rs.getInt(6);
 
-			System.out.println("Select Order ID to complete the transaction");
-			int id = Integer.parseInt(br.readLine());
+					System.out.println("**********************");
+					System.out.println("OrderID: " + orderId + "\nCrop Name: " + cropdao.getCropbyid(cropId)
+							+ "\nLicense Number: " + ln + "\nPrice: " + price + "\nQuantity: " + quan);
+					System.out.println("**********************");
+				}
+				ConnectionManager.getConnection().close();
 
-			completeSell(id);
+				System.out.println("Select Order ID to complete the transaction");
+				int id = Integer.parseInt(br.readLine());
 
+				completeSell(id);
+			} else
+				System.out.println("\n*** No Buy Order ***\n");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -350,14 +365,11 @@ public class WholeSellerDAO extends FeedBack implements Trade, License {
 
 	private void completeSell(int id) {
 
-		String sql = "insert into trade(status) values(?) where id = ?";
+		String sql = "update trade set status = 'Completed' where id = " + id;
 
 		try {
-			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-			st.setString(1, "Completed");
-			st.setInt(2, id);
-
-			st.executeUpdate();
+			Statement st = ConnectionManager.getConnection().createStatement();
+			st.executeQuery(sql);
 
 			ConnectionManager.getConnection().close();
 

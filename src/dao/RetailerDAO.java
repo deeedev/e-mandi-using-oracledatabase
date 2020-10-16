@@ -8,10 +8,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.Crops;
 import model.Retailer;
 import utility.ConnectionManager;
+import utility.FeedBack;
+import utility.License;
+import utility.Trade;
 
-public class RetailerDAO {
+public class RetailerDAO extends FeedBack implements License, Trade {
+
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	CropDAO cropdao = new CropDAO();
+	TradeDAO tradedao = new TradeDAO();
+	UserDAO userdao = new UserDAO();
 
 	public void addRetailer() {
 		// TODO Auto-generated method stub
@@ -42,7 +51,7 @@ public class RetailerDAO {
 				if (id == null) {
 
 					retail.setRetailerID(rs.getInt(1));
-					System.out.println("Enter License Number: ");
+					System.out.println("Assign License Number to User" + userdao.getUserById(rs.getInt(1)) + ": ");
 					try {
 						retail.setLicenseNumber(Long.parseLong(br.readLine()));
 					} catch (NumberFormatException e) {
@@ -56,7 +65,8 @@ public class RetailerDAO {
 				}
 
 			}
-			System.out.println("*** Retailers are successfully added ***");
+			System.out.println("*** No New Account Request for Retailer ***");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,7 +95,7 @@ public class RetailerDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		System.out.println("*** Retailers are successfully added ***");
 	}
 
 	public void viewList() {
@@ -159,7 +169,7 @@ public class RetailerDAO {
 
 	}
 
-	public void removeFarmer(String readLine) {
+	public void removeRetailer(String readLine) {
 		// TODO Auto-generated method stub
 
 		String sql = "Delete from retailer where licensenumber = ?";
@@ -192,6 +202,59 @@ public class RetailerDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	@Override
+	public void Buy() {
+
+		String sql = "select cropid,msp,sellprice from rate";
+
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			System.out.println("CropID \t CropName \t Price");
+			while (rs.next()) {
+				int id = rs.getInt(1);
+				String name = cropdao.getCropbyid(id);
+				int price = rs.getInt(3);
+
+				System.out.println(id + "\t" + name + "\t" + price);
+
+			}
+
+			System.out.println("Enter Crop Id to Buy");
+			int sellId = Integer.parseInt(br.readLine());
+			System.out.println("Enter Quantity: ");
+			int quantity = Integer.parseInt(br.readLine());
+			int price = cropdao.getSellPriceByID(sellId);
+
+			Crops crop = new Crops(sellId, price, quantity);
+			boolean result = tradedao.Buycrop(crop);
+
+			if (result)
+				System.out.println("Order Sent to the WholeSeller");
+			else
+				System.out.println("Unable to Process Order. Please try again later!!");
+
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void Sell() {
+
+	}
+
+	@Override
+	public void licenseRenewal() {
 
 	}
 

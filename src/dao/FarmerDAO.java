@@ -8,13 +8,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.Crops;
 import model.Farmer;
 import utility.ConnectionManager;
+import utility.FeedBack;
+import utility.License;
+import utility.Trade;
 
-public class FarmerDAO {
+public class FarmerDAO extends FeedBack implements Trade, License {
+
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	CropDAO cropdao = new CropDAO();
+	TradeDAO tradedao = new TradeDAO();
+	UserDAO userdao = new UserDAO();
 
 	public void addFarmer() {
-		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		String sql = "select userdetails.id id_1, farmer.farmerid from userdetails left join farmer on userdetails.id = farmer.farmerid where type = 'Farmer'";
@@ -23,13 +31,10 @@ public class FarmerDAO {
 			Statement st = ConnectionManager.getConnection().createStatement();
 			rs = st.executeQuery(sql);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -41,30 +46,27 @@ public class FarmerDAO {
 				if (id == null) {
 
 					fam.setFarmerID(rs.getInt(1));
-					System.out.println("Enter License Number: ");
+					System.out.println("Assign License Number to User" + userdao.getUserById(rs.getInt(1)) + ": ");
 					try {
 						fam.setLicenseNumber(Long.parseLong(br.readLine()));
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					add(fam);
 				}
 
 			}
-			System.out.println("*** Farmers are successfully added ***");
+			System.out.println("*** No New Account Request for Farmer ***");
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	private void add(Farmer fam) {
-		// TODO Auto-generated method stub
 
 		String sql = "Insert into Farmer values (?,?)";
 		try {
@@ -74,21 +76,17 @@ public class FarmerDAO {
 			st.executeUpdate();
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 
 			System.out.println("License Number is already Assigned");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		System.out.println("*** Farmers are successfully added ***");
 	}
 
 	public void viewList() {
-		// TODO Auto-generated method stub
 
 		String sql = "Select Firstname,lastname,email,phonenumber,address,licensenumber from userdetails join Farmer on Farmer.FarmerID = userdetails.id";
 		Statement st;
@@ -98,13 +96,10 @@ public class FarmerDAO {
 			rs = st.executeQuery(sql);
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -117,14 +112,12 @@ public class FarmerDAO {
 				System.out.println("*************************");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	public void searchByLicenseNumber(String readLine) {
-		// TODO Auto-generated method stub
 
 		PreparedStatement preparedStatement = null;
 		try {
@@ -133,13 +126,10 @@ public class FarmerDAO {
 			preparedStatement.setLong(1, Long.parseLong(readLine));
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -152,14 +142,12 @@ public class FarmerDAO {
 				System.out.println("*************************");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	public void removeFarmer(String readLine) {
-		// TODO Auto-generated method stub
 
 		String sql = "Delete from Farmer where licensenumber = ?";
 
@@ -168,13 +156,10 @@ public class FarmerDAO {
 			st.setLong(1, Long.parseLong(readLine));
 			st.executeUpdate();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -182,15 +167,67 @@ public class FarmerDAO {
 		try {
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void licenseRenewal() {
+
+	}
+
+	@Override
+	public void Buy() {
+
+	}
+
+	@Override
+	public void Sell() {
+
+		String sql = "select cropid,msp,buyprice from rate";
+
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			System.out.println("CropID \t CropName \t MSP \t SellPrice");
+			while (rs.next()) {
+
+				int id = rs.getInt(1);
+				String name = cropdao.getCropbyid(id);
+				int msp = rs.getInt(2);
+				int price = rs.getInt(3);
+
+				System.out.println(id + "\t" + name + "\t" + msp + "\t" + price);
+
+			}
+
+			System.out.println("Enter Crop Id to Sell");
+			int sellId = Integer.parseInt(br.readLine());
+			System.out.println("Enter Quantity: ");
+			int quantity = Integer.parseInt(br.readLine());
+			int price = cropdao.getBuyPriceByID(sellId);
+
+			Crops crop = new Crops(sellId, price, quantity);
+			boolean result = tradedao.sellcrop(crop);
+
+			if (result)
+				System.out.println("Order Sent to the WholeSeller");
+			else
+				System.out.println("Unable to Process Order. Please try again later!!");
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

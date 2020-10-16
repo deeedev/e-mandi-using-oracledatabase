@@ -16,6 +16,11 @@ public class WholeSeller {
 		int c;
 
 		do {
+
+			System.out.println("<--------------------------------------------------->");
+			System.out.println("<         Welcome to the WholeSeller Portal               ");
+			System.out.println("<--------------------------------------------------->");
+
 			System.out.println("1. Set Price");
 			System.out.println("2. Buy");
 			System.out.println("3. Sell");

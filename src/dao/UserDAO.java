@@ -34,52 +34,33 @@ public class UserDAO {
 	}
 
 	public int getId() {
-		// TODO Auto-generated method stub
+
 		int i = 0;
 
-		Statement st = null;
-		try {
-			st = ConnectionManager.getConnection().createStatement();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		String sql = "select id from userdetails where rownum <= 1 order by id desc";
-
+		Statement st = null;
 		ResultSet rs = null;
 		try {
+			st = ConnectionManager.getConnection().createStatement();
 			rs = st.executeQuery(sql);
-			try {
-				ConnectionManager.getConnection().close();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			while (rs.next())
-				try {
+			ConnectionManager.getConnection().close();
+		} catch (ClassNotFoundException e) {
 
-					i = rs.getInt(1);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+
 			e.printStackTrace();
 		}
 
@@ -219,6 +200,35 @@ public class UserDAO {
 			System.out.println(e);
 		}
 		return false;
+	}
+
+	public String getUserById(int int1) {
+		// TODO Auto-generated method stub
+
+		String sql = "Select FirstName, LastName from userdetails where id = " + int1;
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				String firstname = rs.getString(1);
+				String lastname = rs.getString(2);
+
+				return firstname + " " + lastname;
+
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 }

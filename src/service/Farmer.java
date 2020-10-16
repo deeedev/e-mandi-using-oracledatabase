@@ -4,19 +4,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import dao.CropDAO;
+import dao.FarmerDAO;
+
 public class Farmer {
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	FarmerDAO famdao = new FarmerDAO();
+	CropDAO cropdao = new CropDAO();
 
 	public void Login() throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
+
+		System.out.println("<--------------------------------------------------->");
+		System.out.println("<         Welcome to the Farmer Portal               ");
+		System.out.println("<--------------------------------------------------->");
 		int ch;
 
 		do {
-
-			System.out.println("<--------------------------------------------------->");
-			System.out.println("<         Welcome to the Farmer Portal               ");
-			System.out.println("<--------------------------------------------------->");
 
 			System.out.println("1. Sell Corps");
 			System.out.println("2. Know Minimum Support Price");
@@ -29,16 +33,11 @@ public class Farmer {
 
 			switch (choice) {
 			case 1:
-
-				System.out.println("1. Buy Order Posted by WholeSeller");
-				System.out.println("2. Post your sell order");
-				System.out.println("3. Exit");
-				System.out.println("Enter your choice: ");
-
+				famdao.Sell();
 				break;
 
 			case 2:
-
+				cropdao.getMSP();
 				break;
 
 			case 3:
@@ -61,7 +60,7 @@ public class Farmer {
 				break;
 
 			}
-		} while (ch != 6);
+		} while (ch != 5);
 
 	}
 

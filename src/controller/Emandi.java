@@ -20,6 +20,7 @@ public class Emandi {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		UserDAO userdao = new UserDAO();
+		Admin admin = new Admin();
 
 		int n1;
 
@@ -59,8 +60,6 @@ public class Emandi {
 
 					switch (o) {
 					case 1:
-						Admin admin = new Admin();
-
 						System.out.println("Enter Username: ");
 						String Aduser = br.readLine();
 						System.out.println("Enter Password: ");
