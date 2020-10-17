@@ -19,7 +19,6 @@ public class CropDAO {
 		String sql = "Insert into crops(id,name) values(?,?)";
 		try {
 			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-			System.out.println(st);
 			System.out.println("Enter Crops ID: ");
 			int id = Integer.parseInt(br.readLine());
 			st.setInt(1, id);
@@ -33,7 +32,7 @@ public class CropDAO {
 			e.printStackTrace();
 		} catch (SQLException e) {
 
-			e.printStackTrace();
+			System.out.println("Crop ID is already Registered!!");
 		} catch (IOException e) {
 
 			e.printStackTrace();

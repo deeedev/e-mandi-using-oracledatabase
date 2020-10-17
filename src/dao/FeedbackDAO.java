@@ -119,7 +119,7 @@ public class FeedbackDAO {
 
 	public void checkFeedback() {
 
-		String sql = "Select * from feedback where type = 'Feedback";
+		String sql = "Select * from feedback where type = 'Feedback'";
 
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
@@ -154,7 +154,7 @@ public class FeedbackDAO {
 	}
 
 	public void checkComplaint() {
-		String sql = "Select * from feedback where type = 'Complaint";
+		String sql = "Select * from feedback where type = 'Complaint'";
 
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();

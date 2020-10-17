@@ -72,20 +72,23 @@ public class LicenseDAO implements License {
 		}
 
 		String sql = "Select status from license where licensenumber = " + ln;
-		System.out.println(sql);
+
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = st.executeQuery(sql);
 
 			while (rs.next()) {
+
 				String status = rs.getString(1);
 
-				if (status == "open")
+				if (status == "open") {
 					System.out.println("*** License Renewal is Pending ***\n");
-				if (status == "Closed")
+				} else if (status == "Closed") {
 					System.out.println("*** License Renewal Rejected ***\n");
-				if (status == "Completed")
+				} else if (status == "Completed") {
 					System.out.println("*** License Renewal Approved ***\n");
+				}
+
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -130,12 +133,13 @@ public class LicenseDAO implements License {
 
 	public void checkLicenseRenew() {
 
-		String sql = "Select * from license where status = 'Open'";
+		String sql = "Select * from license where status = 'open'";
 
 		try {
 			Statement st = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
+
 				int id = rs.getInt(1);
 				int licenseN = rs.getInt(2);
 				String type = rs.getString(3);
@@ -170,12 +174,11 @@ public class LicenseDAO implements License {
 
 		if (s == 1) {
 
-			String sql = "insert into license(status) values(?) where requestid =" + id;
+			String sql = "update license set status = 'Completed' where requestid = " + id;
 
 			try {
-				PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-				st.setString(1, "Completed");
-				st.executeUpdate();
+				Statement st = ConnectionManager.getConnection().createStatement();
+				st.executeQuery(sql);
 
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -189,12 +192,11 @@ public class LicenseDAO implements License {
 			}
 
 		} else {
-			String sql = "insert into license(status) values(?)";
+			String sql = "update license set status = 'Closed' where requestid = " + id;
 
 			try {
-				PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
-				st.setString(1, "Closed");
-				st.executeUpdate();
+				Statement st = ConnectionManager.getConnection().createStatement();
+				st.executeQuery(sql);
 
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

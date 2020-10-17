@@ -46,8 +46,9 @@ public class WholeSellerDAO extends FeedBack implements Trade {
 
 				if (id == null) {
 
-					ws.setWholeSellerID(rs.getInt(1));
-					System.out.println("Assign License Number to User" + userdao.getUserById(rs.getInt(1)) + ": ");
+					int id1 = rs.getInt(1);
+					ws.setWholeSellerID(id1);
+					System.out.println("Assign License Number to User" + userdao.getUserById(id1) + ": ");
 					ws.setLicenseNumber(Long.parseLong(br.readLine()));
 					add(ws);
 				}
