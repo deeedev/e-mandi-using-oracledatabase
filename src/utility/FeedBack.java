@@ -3,17 +3,19 @@ package utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class FeedBack {
 
 	String type;
-	String Name;
+	String name;
 	String phone;
-	String licenseNumber;
+	long licenseNumber;
 	String message;
+	int i = getid();
 
 	public String getType() {
 		return type;
@@ -24,11 +26,11 @@ public abstract class FeedBack {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
-	public void setName(String name) {
-		Name = name;
+	public void setName(String Name) {
+		name = Name;
 	}
 
 	public String getPhone() {
@@ -39,11 +41,11 @@ public abstract class FeedBack {
 		this.phone = phone;
 	}
 
-	public String getLicenseNumber() {
+	public long getLicenseNumber() {
 		return licenseNumber;
 	}
 
-	public void setLicenseNumber(String licenseNumber) {
+	public void setLicenseNumber(long licenseNumber) {
 		this.licenseNumber = licenseNumber;
 	}
 
@@ -55,59 +57,130 @@ public abstract class FeedBack {
 		this.message = message;
 	}
 
-	public static Map<String, ArrayList<String>> getFeedback() {
-		return feedback;
-	}
+	private int getid() {
 
-	public static Map<String, ArrayList<String>> getComplaint() {
-		return complaint;
+		String sql = "select id from feedback where rownum<=1 order by id desc";
+
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				int id = rs.getInt(1);
+				return id;
+			}
+			ConnectionManager.getConnection().close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	ArrayList<String> listFeedback = new ArrayList<String>();
-	ArrayList<String> listComplaint = new ArrayList<String>();
-
-	public static Map<String, ArrayList<String>> feedback = new TreeMap<String, ArrayList<String>>();
-	public static Map<String, ArrayList<String>> complaint = new TreeMap<String, ArrayList<String>>();
-
 	public void fillFeedback() throws IOException {
 
-		System.out.println("Please specify WholeSeller/Farmer: ");
-		listFeedback.add(br.readLine());
+		final String type = "Feedback";
+
+		System.out.println("Please specify WholeSeller/Farmer/Retailer: ");
+		String usertype = br.readLine();
 
 		System.out.println("Enter Name: ");
-		listFeedback.add(br.readLine());
+		String name = br.readLine();
 
 		System.out.println("Enter Phone: ");
-		listFeedback.add(br.readLine());
+		String phone = br.readLine();
 
 		System.out.println("Enter License Number: ");
-		listFeedback.add(br.readLine());
+		long licenseNumber = Long.parseLong(br.readLine());
 
 		System.out.println("Please Enter your message: ");
-		listFeedback.add(br.readLine());
+		String message = br.readLine();
 
-		feedback.put(listFeedback.get(3), listFeedback);
+		String sql = "insert into feedback values(?,?,?,?,?,?)";
+
+		try {
+			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
+			st.setInt(1, ++i);
+			st.setString(2, name);
+			st.setString(3, phone);
+			st.setLong(4, licenseNumber);
+			st.setString(5, message);
+			st.setString(6, usertype);
+			st.setString(7, type);
+			int result = st.executeUpdate();
+
+			if (result == 0)
+				System.out.println("Please Try Again Later");
+			if (result == 1)
+				System.out.println("*** Thanks for your valualble feedback. We will reach you shortly ***");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void fillComplaint() throws IOException {
 
-		System.out.println("Please specify WholeSeller/Farmer: ");
-		listComplaint.add(br.readLine());
+		final String type = "Complaint";
+
+		System.out.println("Please specify WholeSeller/Farmer/Retailer: ");
+		String usertype = br.readLine();
 
 		System.out.println("Enter Name: ");
-		listComplaint.add(br.readLine());
+		String name = br.readLine();
 
 		System.out.println("Enter Phone: ");
-		listComplaint.add(br.readLine());
+		String phone = br.readLine();
 
 		System.out.println("Enter License Number: ");
-		listComplaint.add(br.readLine());
+		long licenseNumber = Long.parseLong(br.readLine());
 
 		System.out.println("Please Enter your message: ");
-		listComplaint.add(br.readLine());
+		String message = br.readLine();
 
-		complaint.put(listComplaint.get(3), listComplaint);
+		String sql = "insert into feedback values(?,?,?,?,?,?)";
+
+		try {
+			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
+			st.setInt(1, ++i);
+			st.setString(2, name);
+			st.setString(3, phone);
+			st.setLong(4, licenseNumber);
+			st.setString(5, message);
+			st.setString(6, usertype);
+			st.setString(7, type);
+			int result = st.executeUpdate();
+
+			if (result == 0)
+				System.out.println("Please Try Again Later");
+			if (result == 1)
+				System.out.println("*** Thanks for your valualble feedback. We will reach you shortly ***");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

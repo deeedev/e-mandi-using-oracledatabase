@@ -80,51 +80,77 @@ public class WholeSeller {
 				wsdao.Sell();
 				break;
 
-			/*
-			 * case 4:
-			 * 
-			 * System.out.println("1. Apply for License Renew");
-			 * System.out.println("2. Check Status");
-			 * System.out.println("Enter your choice: ");
-			 * 
-			 * int choi = 0; try { choi = Integer.parseInt(br.readLine()); } catch
-			 * (NumberFormatException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); } catch (IOException e1) { // TODO Auto-generated catch
-			 * block e1.printStackTrace(); }
-			 * 
-			 * switch (choi) { case 1: wsdao.licenseRenewal();
-			 * System.out.println("\n*** Request has been sent ***\n"); break;
-			 * 
-			 * case 2: System.out.println("Enter your License Number: "); try { String ln =
-			 * br.readLine(); } catch (IOException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 * 
-			 * break; default: break; }
-			 * 
-			 * break;
-			 * 
-			 * case 5: System.out.println("1.Feedback"); System.out.println("2.Complaint");
-			 * System.out.println("Enter your choice: ");
-			 * 
-			 * int choice = 0; try { choice = Integer.parseInt(br.readLine()); } catch
-			 * (NumberFormatException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch
-			 * block e.printStackTrace(); } switch (choice) { case 1: try {
-			 * wsdao.fillFeedback(); } catch (IOException e) { // TODO Auto-generated catch
-			 * block e.printStackTrace(); }
-			 * System.out.println("\n**** Thanks for your valuable feedback ****\n"); break;
-			 * 
-			 * case 2: try { wsdao.fillComplaint(); } catch (IOException e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); } System.out.
-			 * println("\n**** I am sorry for any inconvenience caused to you ****\n");
-			 * break;
-			 * 
-			 * default: // System.out.println("Invalid Input"); break; }
-			 */
+			case 4:
+
+				System.out.println("1. Apply for License Renew");
+				System.out.println("2. Check Status");
+				System.out.println("Enter your choice: ");
+
+				int ch1 = 0;
+				try {
+					ch1 = Integer.parseInt(br.readLine());
+				} catch (NumberFormatException e) {
+					System.out.println("Please Enter Valid Choice");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				switch (ch1) {
+				case 1:
+					wsdao.licenseRenewal();
+					break;
+
+				case 2:
+					wsdao.licenseStatus();
+					break;
+
+				default:
+					break;
+				}
+
+				break;
+
+			case 5:
+				System.out.println("1.Feedback");
+				System.out.println("2.Complaint");
+				System.out.println("Enter your choice: ");
+
+				int i = 0;
+				try {
+					i = Integer.parseInt(br.readLine());
+				} catch (NumberFormatException e) {
+					System.out.println("Please Enter Valid Choice");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				switch (i) {
+				case 1:
+					try {
+						wsdao.fillFeedback();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+
+				case 2:
+					try {
+						wsdao.fillComplaint();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				default:
+					break;
+				}
+				break;
 
 			default:
-				// System.out.println("Invalid Input");
-				break;
+				System.out.println("Invalid Input");
+
 			}
 
 		} while (c != 6);

@@ -46,6 +46,21 @@ public class Farmer {
 				System.out.println("2. Check Status");
 				System.out.println("Enter your choice: ");
 
+				int ch1 = Integer.parseInt(br.readLine());
+
+				switch (ch1) {
+				case 1:
+					famdao.licenseRenewal();
+					break;
+
+				case 2:
+					famdao.licenseStatus();
+					break;
+
+				default:
+					break;
+				}
+
 				break;
 
 			case 4:
@@ -54,9 +69,24 @@ public class Farmer {
 				System.out.println("2.Complaint");
 				System.out.println("Enter your choice: ");
 
+				int i = Integer.parseInt(br.readLine());
+				switch (i) {
+				case 1:
+					famdao.fillFeedback();
+					break;
+
+				case 2:
+					famdao.fillComplaint();
+					break;
+				default:
+					break;
+				}
 				break;
 
 			case 5:
+				break;
+			default:
+				System.out.println("Please Enter Valid Choice");
 				break;
 
 			}

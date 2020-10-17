@@ -47,6 +47,21 @@ public class Retailer {
 				System.out.println("2. Check Status");
 				System.out.println("Enter your choice: ");
 
+				int ch1 = Integer.parseInt(br.readLine());
+
+				switch (ch1) {
+				case 1:
+					retaildao.licenseRenewal();
+					break;
+
+				case 2:
+					retaildao.licenseStatus();
+					break;
+
+				default:
+					break;
+				}
+
 				break;
 
 			case 4:
@@ -55,6 +70,18 @@ public class Retailer {
 				System.out.println("2.Complaint");
 				System.out.println("Enter your choice: ");
 
+				int i = Integer.parseInt(br.readLine());
+				switch (i) {
+				case 1:
+					retaildao.fillFeedback();
+					break;
+
+				case 2:
+					retaildao.fillComplaint();
+					break;
+				default:
+					break;
+				}
 				break;
 
 			case 5:

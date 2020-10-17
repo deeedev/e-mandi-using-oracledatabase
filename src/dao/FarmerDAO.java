@@ -177,7 +177,72 @@ public class FarmerDAO extends FeedBack implements Trade, License {
 
 	@Override
 	public void licenseRenewal() {
+		final String status = "open";
+		final String type = "Farmer";
+		int i = getId();
+		int ln = 0;
+		System.out.println("Enter Your License Number: ");
+		try {
+			ln = Integer.parseInt(br.readLine());
 
+		} catch (NumberFormatException e) {
+			System.out.println("Please Enter Valid License Number");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String sql = "insert into license values(?,?,?,?)";
+
+		try {
+			PreparedStatement st = ConnectionManager.getConnection().prepareStatement(sql);
+			st.setInt(1, ++i);
+			st.setInt(2, ln);
+			st.setString(3, type);
+			st.setString(4, status);
+			st.executeUpdate();
+			ConnectionManager.getConnection().close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("*** Your request has been sent ***");
+
+	}
+
+	private int getId() {
+
+		String sql = "Select requestid from license where rownum<=1 order by requestid desc";
+
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+
+				int id = rs.getInt(1);
+				return id;
+			}
+			ConnectionManager.getConnection().close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 
 	@Override
@@ -225,6 +290,49 @@ public class FarmerDAO extends FeedBack implements Trade, License {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void licenseStatus() {
+
+		int ln = 0;
+		System.out.println("Enter your license Number: ");
+		try {
+			ln = Integer.parseInt(br.readLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Please Enter Valid License Number");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String sql = "Select status from license where licensenumber = " + ln;
+
+		try {
+			Statement st = ConnectionManager.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				String status = rs.getString(1);
+
+				if (status == "Open")
+					System.out.println("*** License Renewal is Pending ***");
+				if (status == "Closed")
+					System.out.println("*** License Renewal Rejected ***");
+				if (status == "Completed")
+					System.out.println("*** License Renewal Approved ***");
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
