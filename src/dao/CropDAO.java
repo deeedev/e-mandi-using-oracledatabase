@@ -175,7 +175,9 @@ public class CropDAO {
 			while (rs.next()) {
 
 				System.out.println(i + ". " + getCropbyid(rs.getInt(1)) + "\t" + rs.getInt(2));
+				i++;
 			}
+			System.out.println();
 			ConnectionManager.getConnection().close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

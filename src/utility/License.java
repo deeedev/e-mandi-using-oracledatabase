@@ -2,8 +2,8 @@ package utility;
 
 public interface License {
 
-	public void licenseRenewal();
+	public void licenseRenewal(String type);
 
-	public void licenseStatus();
+	public void licenseStatus(String type);
 
 }

@@ -6,12 +6,14 @@ import java.io.InputStreamReader;
 
 import dao.CropDAO;
 import dao.FarmerDAO;
+import dao.LicenseDAO;
 
 public class Farmer {
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	FarmerDAO famdao = new FarmerDAO();
 	CropDAO cropdao = new CropDAO();
+	LicenseDAO lndao = new LicenseDAO();
 
 	public void Login() throws NumberFormatException, IOException {
 
@@ -45,16 +47,16 @@ public class Farmer {
 				System.out.println("1. Apply for License Renew");
 				System.out.println("2. Check Status");
 				System.out.println("Enter your choice: ");
-
+				final String type = "Farmer";
 				int ch1 = Integer.parseInt(br.readLine());
 
 				switch (ch1) {
 				case 1:
-					famdao.licenseRenewal();
+					lndao.licenseRenewal(type);
 					break;
 
 				case 2:
-					famdao.licenseStatus();
+					lndao.licenseStatus(type);
 					break;
 
 				default:

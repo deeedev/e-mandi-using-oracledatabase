@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import dao.LicenseDAO;
 import dao.WholeSellerDAO;
 
 public class WholeSeller {
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	WholeSellerDAO wsdao = new WholeSellerDAO();
+	LicenseDAO lndao = new LicenseDAO();
 
 	public void Login() {
 		// TODO Auto-generated method stub
@@ -96,13 +98,14 @@ public class WholeSeller {
 					e.printStackTrace();
 				}
 
+				final String type = "WholeSeller";
 				switch (ch1) {
 				case 1:
-					wsdao.licenseRenewal();
+					lndao.licenseRenewal(type);
 					break;
 
 				case 2:
-					wsdao.licenseStatus();
+					lndao.licenseStatus(type);
 					break;
 
 				default:
@@ -146,6 +149,9 @@ public class WholeSeller {
 				default:
 					break;
 				}
+				break;
+
+			case 6:
 				break;
 
 			default:

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import dao.CropDAO;
+import dao.LicenseDAO;
 import dao.RetailerDAO;
 
 public class Retailer {
@@ -12,6 +13,7 @@ public class Retailer {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	RetailerDAO retaildao = new RetailerDAO();
 	CropDAO cropdao = new CropDAO();
+	LicenseDAO lndao = new LicenseDAO();
 
 	public void Login() throws NumberFormatException, IOException {
 
@@ -48,14 +50,15 @@ public class Retailer {
 				System.out.println("Enter your choice: ");
 
 				int ch1 = Integer.parseInt(br.readLine());
+				final String type = "Retailer";
 
 				switch (ch1) {
 				case 1:
-					retaildao.licenseRenewal();
+					lndao.licenseRenewal(type);
 					break;
 
 				case 2:
-					retaildao.licenseStatus();
+					lndao.licenseStatus(type);
 					break;
 
 				default:

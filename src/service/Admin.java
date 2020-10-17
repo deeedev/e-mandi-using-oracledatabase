@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import dao.CropDAO;
 import dao.FarmerDAO;
+import dao.FeedbackDAO;
+import dao.LicenseDAO;
 import dao.RetailerDAO;
 import dao.WholeSellerDAO;
 
@@ -17,6 +19,8 @@ public class Admin {
 	FarmerDAO famdao = new FarmerDAO();
 	RetailerDAO retaildao = new RetailerDAO();
 	CropDAO cropdao = new CropDAO();
+	LicenseDAO lndao = new LicenseDAO();
+	FeedbackDAO fdao = new FeedbackDAO();
 
 	public void Login() throws IOException, ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
@@ -289,6 +293,27 @@ public class Admin {
 //Admin case 5 starts here!!
 
 			case 5:
+				lndao.checkLicenseRenew();
+				break;
+
+			case 6:
+				System.out.println("1. FeedBack");
+				System.out.println("2. Complaint");
+				System.out.println("Enter Choice");
+
+				int s = Integer.parseInt(br.readLine());
+
+				switch (s) {
+				case 1:
+					fdao.checkFeedback();
+					break;
+
+				case 2:
+					fdao.checkComplaint();
+					break;
+				default:
+					break;
+				}
 				break;
 			}
 		} while (c1 != 7);
